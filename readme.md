@@ -21,15 +21,19 @@
 
 ## Overview
 
-The `chew.note` project aims to be an advanced compiler for NoteText, as
+The `form.note` project aims to be an advanced compiler for NoteText, as
 part of the BaseNote ecosystem. It will just be a library which takes as
 input paths to files and outputs compiled data structures. It builds a
 typechecked mesh representation, linked back to source code through
 NoteText.
 
-The output of this library is fed to `seal.note` which then creates the
-target output runtime build from this typechecked compiler mesh
-structure.
+This library is built upon several sub-libraries:
+
+- `note`: basic parser
+- `tree`: ast builder
+- `chew`: linting
+- `maze`: typechecking and type inference
+- `till`: generating output
 
 It uses a cache to first compile things to JavaScript with types, then
 without types so the thousands of modules of types doesn't grow the size
@@ -99,10 +103,10 @@ these sorts of situations:
   can be compiled except this (possibly a name).
 - `foo bar`: Everything is static and can be statically compiled.
 
-At first, each node is progressively resolved as a `chewGatherType`,
+At first, each node is progressively resolved as a `formGatherType`,
 which means it simply collects an array of children, possibly with
 dynamic head terms. Then if none of the head terms are dynamic, then it
-compiles it into a more specific chew type based on what it is. This
+compiles it into a more specific form type based on what it is. This
 second-level compilation target is still incomplete however, because
 some of the nodes can still be dynamic. So then we try and resolve them,
 if they resolve, they are static. If not, they are runtime.
